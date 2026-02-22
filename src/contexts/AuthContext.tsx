@@ -24,34 +24,39 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Set up auth state listener FIRST
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      (event, session) => {
+    try {
+      const { data: { subscription } } = supabase.auth.onAuthStateChange(
+        (event, session) => {
+          setSession(session);
+          setUser(session?.user ?? null);
+
+          if (session?.user) {
+            setTimeout(() => {
+              fetchUserRole(session.user.id);
+            }, 0);
+          } else {
+            setUserRole(null);
+          }
+        }
+      );
+
+      supabase.auth.getSession().then(({ data: { session } }) => {
         setSession(session);
         setUser(session?.user ?? null);
-        
-        // Defer fetching user role with setTimeout to prevent deadlock
         if (session?.user) {
-          setTimeout(() => {
-            fetchUserRole(session.user.id);
-          }, 0);
-        } else {
-          setUserRole(null);
+          fetchUserRole(session.user.id);
         }
-      }
-    );
+        setLoading(false);
+      }).catch((error) => {
+        console.warn("Failed to get session:", error);
+        setLoading(false);
+      });
 
-    // THEN check for existing session
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setSession(session);
-      setUser(session?.user ?? null);
-      if (session?.user) {
-        fetchUserRole(session.user.id);
-      }
+      return () => subscription.unsubscribe();
+    } catch (error) {
+      console.warn("Auth initialization error:", error);
       setLoading(false);
-    });
-
-    return () => subscription.unsubscribe();
+    }
   }, []);
 
   const fetchUserRole = async (userId: string) => {
@@ -61,23 +66,23 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         .select("role")
         .eq("user_id", userId)
         .maybeSingle();
-      
+
       if (error) {
-        console.error("Error fetching user role:", error);
+        console.warn("Error fetching user role:", error);
         return;
       }
-      
+
       if (data) {
         setUserRole(data.role as AppRole);
       }
     } catch (error) {
-      console.error("Error fetching user role:", error);
+      console.warn("Error fetching user role:", error);
     }
   };
 
   const signUp = async (email: string, password: string, fullName: string, role: AppRole) => {
-    const redirectUrl = `${window.location.origin}/`;
-    
+    const redirectUrl = ${window.location.origin}/;
+
     const { error } = await supabase.auth.signUp({
       email,
       password,
@@ -89,7 +94,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         },
       },
     });
-    
+
     return { error: error as Error | null };
   };
 
@@ -98,7 +103,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       email,
       password,
     });
-    
+
     return { error: error as Error | null };
   };
 
