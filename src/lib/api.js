@@ -1,7 +1,8 @@
 import axios from "axios";
 
+const isDev = import.meta.env.DEV;
 const api = axios.create({
-  baseURL: "http://localhost:8084/api/v1",
+  baseURL: isDev ? "http://localhost:8084/api/v1" : "/api/v1",
   headers: {
     "Content-Type": "application/json",
   },
@@ -24,7 +25,7 @@ export const driveApi = {
   getAll: () => api.get("/drives"),
   getById: (id) => api.get(`/drives/${id}`),
   create: (data) => api.post("/drives", data),
-  update: (id, data) => api.put(`/drives/${id}`, data),
+  update: (id, data) => api.put(`/drives/${id}/status`, data),
   delete: (id) => api.delete(`/drives/${id}`),
 };
 
@@ -47,15 +48,15 @@ export const requestApi = {
 export const deliveryApi = {
   getAll: () => api.get("/deliveries"),
   create: (data) => api.post("/deliveries", data),
-  update: (id, data) => api.put(`/deliveries/${id}`, data),
+  update: (id, data) => api.put(`/deliveries/${id}/status`, data),
 };
 
 export const statsApi = {
-  getOverview: () => api.get("/stats/overview"),
+  getOverview: () => api.get("/stats"),
 };
 
 export const chatApi = {
-  sendMessage: (message) => api.post("/chat", { message }),
+  sendMessage: (messages) => api.post("/chat", { messages }),
 };
 
 export default api;

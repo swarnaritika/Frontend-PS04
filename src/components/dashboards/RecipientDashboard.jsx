@@ -19,6 +19,8 @@ const RecipientDashboard = () => {
   const [availableDonations, setAvailableDonations] = useState([]);
   const [loading, setLoading] = useState(true);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
+  const [currentEditId, setCurrentEditId] = useState(null);
   const [searchQuery, setSearchQuery] = useState("");
   const [formData, setFormData] = useState({
     title: "",
@@ -66,6 +68,49 @@ const RecipientDashboard = () => {
       });
     } catch (error) {
       toast.error("Failed to submit request");
+    }
+  };
+
+  const handleEdit = (request) => {
+    setFormData({
+      title: request.title,
+      description: request.description,
+      category: request.category,
+      urgency: request.urgency,
+      deliveryAddress: request.deliveryAddress,
+    });
+    setCurrentEditId(request._id);
+    setIsEditDialogOpen(true);
+  };
+
+  const handleEditSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      await requestApi.update(currentEditId, formData);
+      toast.success("Request updated!");
+      setIsEditDialogOpen(false);
+      fetchData();
+      setCurrentEditId(null);
+      setFormData({
+        title: "",
+        description: "",
+        category: "Food",
+        urgency: "normal",
+        deliveryAddress: "",
+      });
+    } catch (error) {
+      toast.error("Failed to update request");
+    }
+  };
+
+  const handleDelete = async (id) => {
+    if (!window.confirm("Delete this request?")) return;
+    try {
+      await requestApi.delete(id);
+      toast.success("Request deleted successfully");
+      fetchData();
+    } catch (error) {
+      toast.error("Failed to delete request");
     }
   };
 
@@ -128,13 +173,13 @@ const RecipientDashboard = () => {
             {loading ? (
               <div className="py-12 flex justify-center"><Clock className="animate-spin" /></div>
             ) : requests.length === 0 ? (
-              <Card className="py-12 text-center glass-card border-black">
+              <Card className="py-12 text-center  border-black">
                 <p className="text-muted-foreground">You haven't made any requests yet.</p>
               </Card>
             ) : (
               <div className="grid gap-4">
                 {requests.map((request) => (
-                  <Card key={request._id} className="glass-card border-black hover:glass-strong transition-all">
+                  <Card key={request._id} className=" border-black hover:-translate-y-1 hover:shadow-none transition-all">
                     <CardHeader className="pb-2">
                       <div className="flex items-start justify-between">
                         <div>
@@ -150,6 +195,14 @@ const RecipientDashboard = () => {
                     <CardContent>
                       <p className="text-sm text-muted-foreground">{request.description}</p>
                     </CardContent>
+                    <div className="flex border-t-2 border-black divide-x-2 divide-black">
+                      <Button variant="ghost" className="flex-1 rounded-none py-2 hover:bg-[#FFCC00]" onClick={() => handleEdit(request)}>
+                        Edit
+                      </Button>
+                      <Button variant="ghost" className="flex-1 rounded-none py-2 text-red-600 hover:bg-red-500 hover:text-white" onClick={() => handleDelete(request._id)}>
+                        Delete
+                      </Button>
+                    </div>
                   </Card>
                 ))}
               </div>
@@ -161,7 +214,7 @@ const RecipientDashboard = () => {
               {availableDonations
                 .filter(d => d.title.toLowerCase().includes(searchQuery.toLowerCase()))
                 .map((donation) => (
-                <Card key={donation._id} className="glass-card border-black hover:glass-strong transition-all overflow-hidden">
+                <Card key={donation._id} className=" border-black hover:-translate-y-1 hover:shadow-none transition-all overflow-hidden">
                   <div className="h-32 bg-primary flex items-center justify-center">
                     <Package className="w-12 h-12 text-primary/20" />
                   </div>
@@ -251,6 +304,72 @@ const RecipientDashboard = () => {
                 />
               </div>
               <Button type="submit" className="w-full">Submit Request</Button>
+            </form>
+          </DialogContent>
+        </Dialog>
+
+        <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle>Edit Request</DialogTitle>
+              <DialogDescription>Update your support request details.</DialogDescription>
+            </DialogHeader>
+            <form onSubmit={handleEditSubmit} className="space-y-4 pt-4">
+              <div className="space-y-2">
+                <Label htmlFor="edit-req-title">What do you need?</Label>
+                <Input 
+                  id="edit-req-title" 
+                  value={formData.title}
+                  onChange={(e) => setFormData({...formData, title: e.target.value})}
+                  required 
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="edit-req-desc">Details</Label>
+                <Textarea 
+                  id="edit-req-desc" 
+                  value={formData.description}
+                  onChange={(e) => setFormData({...formData, description: e.target.value})}
+                  required 
+                />
+              </div>
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label>Urgency</Label>
+                  <select 
+                    className="w-full h-10 px-3 py-2 bg-background border border-input rounded-none text-sm"
+                    value={formData.urgency}
+                    onChange={(e) => setFormData({...formData, urgency: e.target.value})}
+                  >
+                    <option value="normal">Normal</option>
+                    <option value="high">High</option>
+                    <option value="emergency">Emergency</option>
+                  </select>
+                </div>
+                <div className="space-y-2">
+                  <Label>Category</Label>
+                  <select 
+                    className="w-full h-10 px-3 py-2 bg-background border border-input rounded-none text-sm"
+                    value={formData.category}
+                    onChange={(e) => setFormData({...formData, category: e.target.value})}
+                  >
+                    <option>Food</option>
+                    <option>Clothing</option>
+                    <option>Medical</option>
+                    <option>Other</option>
+                  </select>
+                </div>
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="edit-req-addr">Delivery Address</Label>
+                <Input 
+                  id="edit-req-addr" 
+                  value={formData.deliveryAddress}
+                  onChange={(e) => setFormData({...formData, deliveryAddress: e.target.value})}
+                  required 
+                />
+              </div>
+              <Button type="submit" className="w-full">Save Changes</Button>
             </form>
           </DialogContent>
         </Dialog>

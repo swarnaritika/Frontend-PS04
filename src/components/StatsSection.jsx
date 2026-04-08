@@ -34,7 +34,7 @@ const StatsSection = () => {
     <section id="impact" className="py-20 relative">
       <div className="container mx-auto px-4">
         <div className="text-center mb-12">
-          <h2 className="text-3xl md:text-4xl font-bold text-gradient mb-4">
+          <h2 className="text-3xl md:text-4xl font-bold text-black mb-4">
             Our Collective Impact
           </h2>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
@@ -46,13 +46,13 @@ const StatsSection = () => {
           {stats.map((stat, index) => (
             <Card
               key={index}
-              className="text-center group glass-card border-black hover:glass-strong transition-all"
+              className="text-center group  border-black hover:-translate-y-1 hover:shadow-none transition-all"
             >
               <CardContent className="pt-8 pb-8">
-                <div className="w-16 h-16 bg-gradient-hero rounded-none flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform shadow-glass">
+                <div className="w-16 h-16 bg-[#FFCC00] rounded-none flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform shadow-">
                   <stat.icon className="w-8 h-8 text-white" />
                 </div>
-                <div className="text-4xl font-bold text-gradient mb-1">
+                <div className="text-4xl font-bold text-black mb-1">
                   {stat.value}
                 </div>
                 <div className="text-lg font-semibold text-foreground mb-1">

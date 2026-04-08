@@ -83,13 +83,13 @@ const LogisticsDashboard = () => {
             {loading ? (
               <div className="py-12 flex justify-center"><Clock className="animate-spin" /></div>
             ) : deliveries.length === 0 ? (
-              <Card className="py-12 text-center glass-card border-black">
+              <Card className="py-12 text-center  border-black">
                 <p className="text-muted-foreground">You don't have any active deliveries.</p>
               </Card>
             ) : (
               <div className="grid gap-4">
                 {deliveries.map((delivery) => (
-                  <Card key={delivery._id} className="glass-card border-black hover:glass-strong transition-all">
+                  <Card key={delivery._id} className=" border-black hover:-translate-y-1 hover:shadow-none transition-all">
                     <CardHeader className="pb-2">
                       <div className="flex items-start justify-between">
                         <div>
@@ -138,7 +138,7 @@ const LogisticsDashboard = () => {
           <TabsContent value="pending" className="space-y-6 mt-0">
             <div className="grid gap-4">
               {pendingRequests.map((request) => (
-                <Card key={request._id} className="glass-card border-black hover:glass-strong transition-all">
+                <Card key={request._id} className=" border-black hover:-translate-y-1 hover:shadow-none transition-all">
                   <CardHeader className="pb-2">
                     <div className="flex items-start justify-between">
                       <div>

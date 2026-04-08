@@ -69,7 +69,7 @@ const Auth = () => {
         </Link>
       </div>
 
-      <Card className="w-full max-w-md border-none shadow-elevated">
+      <Card className="w-full max-w-md  shadow-elevated">
         <CardHeader className="text-center">
           <div className="w-16 h-16 bg-primary text-primary rounded-none flex items-center justify-center mx-auto mb-4">
             <SelectedIcon className="w-8 h-8" />

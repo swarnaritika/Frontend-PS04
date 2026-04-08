@@ -40,10 +40,10 @@ const DonationDrivesSection = () => {
       <div className="container mx-auto px-4">
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-12">
           <div>
-            <span className="inline-block text-primary font-semibold text-sm uppercase tracking-wider mb-3 glass px-4 py-2 rounded-none">
+            <span className="inline-block text-primary font-semibold text-sm uppercase tracking-wider mb-3  px-4 py-2 rounded-none">
               Active Campaigns
             </span>
-            <h2 className="text-3xl md:text-4xl font-bold text-gradient mb-2">
+            <h2 className="text-3xl md:text-4xl font-bold text-black mb-2">
               Current Donation Drives
             </h2>
             <p className="text-lg text-muted-foreground max-w-xl">
@@ -51,7 +51,7 @@ const DonationDrivesSection = () => {
             </p>
           </div>
           <Link to="/auth?role=donor">
-            <Button variant="outline" className="self-start md:ml-auto glass hover:glass-strong">
+            <Button variant="outline" className="self-start md:ml-auto  hover:-translate-y-1 hover:shadow-none">
               View All Drives
               <ArrowRight className="w-4 h-4 ml-2" />
             </Button>
@@ -59,13 +59,13 @@ const DonationDrivesSection = () => {
         </div>
 
         {drives.length === 0 ? (
-          <div className="text-center py-12 glass-card">
+          <div className="text-center py-12 ">
             <p className="text-muted-foreground italic">No active donation drives at the moment. Check back soon!</p>
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {drives.map((drive) => (
-              <Card key={drive._id} className="overflow-hidden group glass-card border-black hover:glass-strong transition-all">
+              <Card key={drive._id} className="overflow-hidden group  border-black hover:-translate-y-1 hover:shadow-none transition-all">
                 <div className="relative h-48 overflow-hidden">
                   <img
                     src={drive.imageUrl || "https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?w=400&h=250&fit=crop"}
@@ -73,11 +73,11 @@ const DonationDrivesSection = () => {
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                   />
                   <div className="absolute top-4 left-4 flex gap-2">
-                    <Badge variant="secondary" className="glass-strong">
+                    <Badge variant="secondary" className="">
                       {drive.category}
                     </Badge>
                     {drive.status === "active" && (
-                      <Badge className="bg-gradient-hero text-white border-0">
+                      <Badge className="bg-[#FFCC00] text-white border-0">
                         Active
                       </Badge>
                     )}
@@ -85,7 +85,7 @@ const DonationDrivesSection = () => {
                 </div>
 
                 <CardHeader className="pb-2">
-                  <CardTitle className="line-clamp-1 text-gradient">{drive.title}</CardTitle>
+                  <CardTitle className="line-clamp-1 text-black">{drive.title}</CardTitle>
                   <div className="flex flex-wrap gap-4 text-sm text-muted-foreground">
                     <span className="flex items-center gap-1">
                       <Calendar className="w-4 h-4" />
@@ -117,7 +117,7 @@ const DonationDrivesSection = () => {
 
                 <CardFooter className="pt-0">
                   <Link to="/auth?role=donor" className="w-full">
-                    <Button className="w-full bg-gradient-hero border-0 hover:opacity-90">Donate to this Drive</Button>
+                    <Button className="w-full bg-[#FFCC00] border-0 hover:opacity-90">Donate to this Drive</Button>
                   </Link>
                 </CardFooter>
               </Card>

@@ -34,10 +34,10 @@ const HowItWorksSection = () => {
     <section id="how-it-works" className="py-20 relative">
       <div className="container mx-auto px-4">
         <div className="text-center mb-16">
-          <span className="inline-block text-primary font-semibold text-sm uppercase tracking-wider mb-3 glass px-4 py-2 rounded-none">
+          <span className="inline-block text-primary font-semibold text-sm uppercase tracking-wider mb-3  px-4 py-2 rounded-none">
             Simple Process
           </span>
-          <h2 className="text-3xl md:text-4xl font-bold text-gradient mb-4">
+          <h2 className="text-3xl md:text-4xl font-bold text-black mb-4">
             How GiveHope Works
           </h2>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
@@ -47,21 +47,21 @@ const HowItWorksSection = () => {
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 relative">
           {/* Connection Line (desktop) */}
-          <div className="hidden lg:block absolute top-24 left-[12.5%] right-[12.5%] h-0.5 bg-gradient-hero opacity-30 -z-10" />
+          <div className="hidden lg:block absolute top-24 left-[12.5%] right-[12.5%] h-0.5 bg-[#FFCC00] opacity-30 -z-10" />
 
           {steps.map((step, index) => (
             <div key={index} className="relative">
-              <Card className="text-center h-full glass-card border-black hover:glass-strong transition-all">
+              <Card className="text-center h-full  border-black hover:-translate-y-1 hover:shadow-none transition-all">
                 <CardHeader className="pb-4">
                   <div className="relative mx-auto mb-4">
-                    <div className={`w-16 h-16 bg-gradient-hero rounded-none flex items-center justify-center shadow-glass`}>
+                    <div className={`w-16 h-16 bg-[#FFCC00] rounded-none flex items-center justify-center shadow-`}>
                       <step.icon className="w-8 h-8 text-white" />
                     </div>
-                    <div className="absolute -top-2 -right-2 w-7 h-7 glass-strong border-2 border-primary rounded-none flex items-center justify-center text-sm font-bold text-primary">
+                    <div className="absolute -top-2 -right-2 w-7 h-7  border-2 border-primary rounded-none flex items-center justify-center text-sm font-bold text-primary">
                       {index + 1}
                     </div>
                   </div>
-                  <CardTitle className="text-xl text-gradient">{step.title}</CardTitle>
+                  <CardTitle className="text-xl text-black">{step.title}</CardTitle>
                 </CardHeader>
                 <CardContent>
                   <p className="text-muted-foreground">{step.description}</p>

@@ -18,6 +18,8 @@ const DonorDashboard = () => {
   const [donations, setDonations] = useState([]);
   const [loading, setLoading] = useState(true);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
+  const [currentEditId, setCurrentEditId] = useState(null);
   const [formData, setFormData] = useState({
     title: "",
     description: "",
@@ -70,6 +72,51 @@ const DonorDashboard = () => {
     }
   };
 
+  const handleEdit = (donation) => {
+    setFormData({
+      title: donation.title,
+      description: donation.description,
+      category: donation.category,
+      quantity: donation.quantity,
+      condition: donation.condition,
+      pickupAddress: donation.pickupAddress,
+    });
+    setCurrentEditId(donation._id);
+    setIsEditDialogOpen(true);
+  };
+
+  const handleEditSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      await donationApi.update(currentEditId, formData);
+      toast.success("Donation updated successfully!");
+      setIsEditDialogOpen(false);
+      fetchDonations();
+      setCurrentEditId(null);
+      setFormData({
+        title: "",
+        description: "",
+        category: "Food",
+        quantity: 1,
+        condition: "new",
+        pickupAddress: "",
+      });
+    } catch (error) {
+      toast.error("Failed to update donation");
+    }
+  };
+
+  const handleDelete = async (id) => {
+    if (!window.confirm("Are you sure you want to delete this donation?")) return;
+    try {
+      await donationApi.delete(id);
+      toast.success("Donation removed successfully!");
+      fetchDonations();
+    } catch (error) {
+      toast.error("Failed to delete donation");
+    }
+  };
+
   const stats = {
     total: donations.length,
     available: donations.filter(d => d.status === "available").length,
@@ -90,27 +137,27 @@ const DonorDashboard = () => {
     <DashboardLayout title="Donor Dashboard" icon={<Gift className="w-5 h-5" />}>
       <div className="space-y-8">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-          <Card className="glass-card border-black hover:glass-strong transition-all">
+          <Card className=" border-black hover:-translate-y-1 hover:shadow-none transition-all">
             <CardContent className="pt-6">
-              <div className="text-2xl font-bold text-gradient">{stats.total}</div>
+              <div className="text-2xl font-bold text-black">{stats.total}</div>
               <p className="text-xs text-muted-foreground">Total Listings</p>
             </CardContent>
           </Card>
-          <Card className="glass-card border-black hover:glass-strong transition-all">
+          <Card className=" border-black hover:-translate-y-1 hover:shadow-none transition-all">
             <CardContent className="pt-6">
-              <div className="text-2xl font-bold text-gradient">{stats.available}</div>
+              <div className="text-2xl font-bold text-black">{stats.available}</div>
               <p className="text-xs text-muted-foreground">Available</p>
             </CardContent>
           </Card>
-          <Card className="glass-card border-black hover:glass-strong transition-all">
+          <Card className=" border-black hover:-translate-y-1 hover:shadow-none transition-all">
             <CardContent className="pt-6">
-              <div className="text-2xl font-bold text-gradient">{stats.claimed}</div>
+              <div className="text-2xl font-bold text-black">{stats.claimed}</div>
               <p className="text-xs text-muted-foreground">Claimed</p>
             </CardContent>
           </Card>
-          <Card className="glass-card border-black hover:glass-strong transition-all">
+          <Card className=" border-black hover:-translate-y-1 hover:shadow-none transition-all">
             <CardContent className="pt-6">
-              <div className="text-2xl font-bold text-gradient">{stats.delivered}</div>
+              <div className="text-2xl font-bold text-black">{stats.delivered}</div>
               <p className="text-xs text-muted-foreground">Delivered</p>
             </CardContent>
           </Card>
@@ -185,18 +232,78 @@ const DonorDashboard = () => {
               </form>
             </DialogContent>
           </Dialog>
+          <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
+            <DialogContent>
+              <DialogHeader>
+                <DialogTitle>Edit Donation Listing</DialogTitle>
+                <DialogDescription>Update the details of your donation.</DialogDescription>
+              </DialogHeader>
+              <form onSubmit={handleEditSubmit} className="space-y-4 pt-4">
+                <div className="space-y-2">
+                  <Label htmlFor="edit-title">Item Name</Label>
+                  <Input 
+                    id="edit-title" 
+                    value={formData.title}
+                    onChange={(e) => setFormData({...formData, title: e.target.value})}
+                    required 
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="edit-description">Description</Label>
+                  <Textarea 
+                    id="edit-description" 
+                    value={formData.description}
+                    onChange={(e) => setFormData({...formData, description: e.target.value})}
+                    required 
+                  />
+                </div>
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <Label>Category</Label>
+                    <select 
+                      className="w-full h-10 px-3 py-2 bg-background border border-input rounded-none text-sm"
+                      value={formData.category} 
+                      onChange={(e) => setFormData({...formData, category: e.target.value})}
+                    >
+                      {categories.map(c => <option key={c} value={c}>{c}</option>)}
+                    </select>
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="edit-quantity">Quantity</Label>
+                    <Input 
+                      id="edit-quantity" 
+                      type="number" 
+                      value={formData.quantity}
+                      onChange={(e) => setFormData({...formData, quantity: Number(e.target.value)})}
+                      required 
+                    />
+                  </div>
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="edit-pickupAddress">Pickup Address</Label>
+                  <Input 
+                    id="edit-pickupAddress" 
+                    value={formData.pickupAddress}
+                    onChange={(e) => setFormData({...formData, pickupAddress: e.target.value})}
+                    required 
+                  />
+                </div>
+                <Button type="submit" className="w-full">Save Changes</Button>
+              </form>
+            </DialogContent>
+          </Dialog>
         </div>
 
         {loading ? (
           <div className="py-12 flex justify-center"><Clock className="animate-spin" /></div>
         ) : donations.length === 0 ? (
-          <Card className="py-12 text-center glass-card border-black">
+          <Card className="py-12 text-center  border-black">
             <p className="text-muted-foreground">You haven't listed any items yet.</p>
           </Card>
         ) : (
           <div className="grid gap-4">
             {donations.map((donation) => (
-              <Card key={donation._id} className="glass-card border-black hover:glass-strong transition-all">
+              <Card key={donation._id} className=" border-black hover:-translate-y-1 hover:shadow-none transition-all">
                 <CardHeader className="pb-2">
                   <div className="flex items-start justify-between">
                     <div>
@@ -213,6 +320,14 @@ const DonorDashboard = () => {
                     {donation.pickupAddress}
                   </div>
                 </CardContent>
+                <div className="flex border-t-2 border-black divide-x-2 divide-black mt-4">
+                  <Button variant="ghost" className="flex-1 rounded-none py-2 hover:bg-[#FFCC00]" onClick={() => handleEdit(donation)}>
+                    Edit
+                  </Button>
+                  <Button variant="ghost" className="flex-1 rounded-none py-2 text-red-600 hover:bg-red-500 hover:text-white" onClick={() => handleDelete(donation._id)}>
+                    Delete
+                  </Button>
+                </div>
               </Card>
             ))}
           </div>

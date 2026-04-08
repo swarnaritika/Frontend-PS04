@@ -38,7 +38,7 @@ const RolesSection = () => {
     <section className="py-20 relative">
       <div className="container mx-auto px-4">
         <div className="text-center mb-16">
-          <h2 className="text-3xl md:text-4xl font-bold text-gradient mb-4">
+          <h2 className="text-3xl md:text-4xl font-bold text-black mb-4">
             A Role for Everyone
           </h2>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
@@ -48,12 +48,12 @@ const RolesSection = () => {
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           {roles.map((role, i) => (
-            <Card key={i} className="glass-card border-black hover:glass-strong transition-all group">
+            <Card key={i} className=" border-black hover:-translate-y-1 hover:shadow-none transition-all group">
               <CardHeader className="text-center">
-                <div className={`w-16 h-16 bg-gradient-hero rounded-none flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform shadow-glass`}>
+                <div className={`w-16 h-16 bg-[#FFCC00] rounded-none flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform shadow-`}>
                   <role.icon className="w-8 h-8 text-white" />
                 </div>
-                <CardTitle className="text-gradient">{role.title}</CardTitle>
+                <CardTitle className="text-black">{role.title}</CardTitle>
               </CardHeader>
               <CardContent className="text-center">
                 <p className="text-muted-foreground">{role.description}</p>

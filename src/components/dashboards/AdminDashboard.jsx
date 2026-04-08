@@ -74,6 +74,28 @@ const AdminDashboard = () => {
     }
   };
 
+  const handleUpdateDriveStatus = async (id, currentStatus) => {
+    try {
+      const newStatus = currentStatus === "active" ? "completed" : "active";
+      await driveApi.update(id, { status: newStatus });
+      toast.success(`Drive status updated to ${newStatus}`);
+      fetchData();
+    } catch (error) {
+      toast.error("Failed to update status");
+    }
+  };
+
+  const handleDeleteDrive = async (id) => {
+    if (!window.confirm("Are you sure you want to delete this drive?")) return;
+    try {
+      await driveApi.delete(id);
+      toast.success("Drive deleted successfully");
+      fetchData();
+    } catch (error) {
+      toast.error("Failed to delete drive");
+    }
+  };
+
   const statCards = [
     { label: "Total Donations", value: stats.totalDonations, icon: Package, color: "text-primary" },
     { label: "Total Requests", value: stats.totalRequests, icon: AlertCircle, color: "text-secondary" },
@@ -87,12 +109,12 @@ const AdminDashboard = () => {
       <div className="space-y-8">
         <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-4">
           {statCards.map((card, i) => (
-            <Card key={i} className="glass-card border-black hover:glass-strong transition-all">
+            <Card key={i} className=" border-black hover:-translate-y-1 hover:shadow-none transition-all">
               <CardContent className="pt-6">
                 <div className="flex items-center justify-between mb-2">
                   <card.icon className={`w-5 h-5 ${card.color}`} />
                 </div>
-                <div className="text-2xl font-bold text-gradient">{card.value}</div>
+                <div className="text-2xl font-bold text-black">{card.value}</div>
                 <p className="text-xs text-muted-foreground">{card.label}</p>
               </CardContent>
             </Card>
@@ -186,9 +208,9 @@ const AdminDashboard = () => {
           </Dialog>
         </div>
 
-        <Card className="glass-card border-black">
+        <Card className=" border-black">
           <CardHeader>
-            <CardTitle className="text-gradient">Active Donation Drives</CardTitle>
+            <CardTitle className="text-black">Active Donation Drives</CardTitle>
           </CardHeader>
           <CardContent>
             <Table>
@@ -199,6 +221,7 @@ const AdminDashboard = () => {
                   <TableHead>Progress</TableHead>
                   <TableHead>End Date</TableHead>
                   <TableHead>Status</TableHead>
+                  <TableHead>Actions</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -222,6 +245,16 @@ const AdminDashboard = () => {
                       <Badge variant={drive.status === "active" ? "default" : "secondary"}>
                         {drive.status}
                       </Badge>
+                    </TableCell>
+                    <TableCell>
+                      <div className="flex gap-2">
+                        <Button variant="outline" size="sm" onClick={() => handleUpdateDriveStatus(drive._id, drive.status)}>
+                          Toggle
+                        </Button>
+                        <Button variant="destructive" size="sm" onClick={() => handleDeleteDrive(drive._id)}>
+                          Delete
+                        </Button>
+                      </div>
                     </TableCell>
                   </TableRow>
                 ))}

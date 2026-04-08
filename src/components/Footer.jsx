@@ -6,34 +6,34 @@ import { Button } from "@/components/ui/button";
 const Footer = () => {
   return (
     <footer className="relative pt-16 pb-8 border-t border-black mt-20">
-      <div className="absolute inset-0 glass-strong -z-10"></div>
+      <div className="absolute inset-0  -z-10"></div>
       <div className="container mx-auto px-4">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-12">
           <div className="space-y-4">
             <Link to="/" className="flex items-center gap-2 group">
-              <div className="w-8 h-8 bg-gradient-hero rounded-none flex items-center justify-center text-white">
+              <div className="w-8 h-8 bg-[#FFCC00] rounded-none flex items-center justify-center text-white">
                 <Heart className="w-5 h-5" />
               </div>
-              <span className="text-xl font-bold text-gradient">GiveHope</span>
+              <span className="text-xl font-bold text-black">GiveHope</span>
             </Link>
             <p className="text-muted-foreground text-sm leading-relaxed">
               Making community giving transparent, efficient, and impactful. Connecting donors with those who need it most.
             </p>
             <div className="flex items-center gap-4 pt-2">
-              <a href="#" className="text-muted-foreground hover:text-primary transition-colors p-2 glass rounded-none hover:glass-strong">
+              <a href="#" className="text-muted-foreground hover:text-primary transition-colors p-2  rounded-none hover:-translate-y-1 hover:shadow-none">
                 <Twitter className="w-5 h-5" />
               </a>
-              <a href="#" className="text-muted-foreground hover:text-primary transition-colors p-2 glass rounded-none hover:glass-strong">
+              <a href="#" className="text-muted-foreground hover:text-primary transition-colors p-2  rounded-none hover:-translate-y-1 hover:shadow-none">
                 <Github className="w-5 h-5" />
               </a>
-              <a href="#" className="text-muted-foreground hover:text-primary transition-colors p-2 glass rounded-none hover:glass-strong">
+              <a href="#" className="text-muted-foreground hover:text-primary transition-colors p-2  rounded-none hover:-translate-y-1 hover:shadow-none">
                 <Linkedin className="w-5 h-5" />
               </a>
             </div>
           </div>
 
           <div>
-            <h4 className="font-bold mb-6 text-gradient">Quick Links</h4>
+            <h4 className="font-bold mb-6 text-black">Quick Links</h4>
             <ul className="space-y-4 text-sm">
               <li><a href="/#how-it-works" className="text-muted-foreground hover:text-primary transition-colors">How it Works</a></li>
               <li><a href="/#drives" className="text-muted-foreground hover:text-primary transition-colors">Donation Drives</a></li>
@@ -43,7 +43,7 @@ const Footer = () => {
           </div>
 
           <div>
-            <h4 className="font-bold mb-6 text-gradient">Resources</h4>
+            <h4 className="font-bold mb-6 text-black">Resources</h4>
             <ul className="space-y-4 text-sm">
               <li><a href="#" className="text-muted-foreground hover:text-primary transition-colors">Donor Guide</a></li>
               <li><a href="#" className="text-muted-foreground hover:text-primary transition-colors">Recipient FAQ</a></li>
@@ -53,15 +53,15 @@ const Footer = () => {
           </div>
 
           <div>
-            <h4 className="font-bold mb-6 text-gradient">Newsletter</h4>
+            <h4 className="font-bold mb-6 text-black">Newsletter</h4>
             <p className="text-sm text-muted-foreground mb-4">Stay updated with latest drives and impact stories.</p>
             <form className="flex gap-2">
               <input 
                 type="email" 
                 placeholder="Your email" 
-                className="glass rounded-none px-3 py-2 text-sm flex-1 focus:outline-none focus:ring-2 focus:ring-primary border-0"
+                className=" rounded-none px-3 py-2 text-sm flex-1 focus:outline-none focus:ring-2 focus:ring-primary border-0"
               />
-              <Button size="sm" className="bg-gradient-hero border-0">Join</Button>
+              <Button size="sm" className="bg-[#FFCC00] border-0">Join</Button>
             </form>
           </div>
         </div>
